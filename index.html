@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="green">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Portfolio - Лазаренко Алексей</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Default Green Theme */
+            --bg-color: #050505;
+            --text-color: #33ff00;
+            --dim-color: #1a8000;
+            --glow: 0 0 5px rgba(51, 255, 0, 0.7);
+            --hero-glow: 0 0 15px rgba(51, 255, 0, 0.8);
+            --inverted-bg: rgba(26, 128, 0, 0.2);
+            --path-color: #00ccff;
+            --title-color: #ffff00;
+        }
+
+        [data-theme="amber"] {
+            --text-color: #ffb000;
+            --dim-color: #805800;
+            --glow: 0 0 5px rgba(255, 176, 0, 0.7);
+            --hero-glow: 0 0 15px rgba(255, 176, 0, 0.8);
+            --inverted-bg: rgba(128, 88, 0, 0.2);
+            --path-color: #ffdd55;
+            --title-color: #ffffff;
+        }
+
+        [data-theme="blue"] {
+            --text-color: #00e5ff;
+            --dim-color: #007280;
+            --glow: 0 0 5px rgba(0, 229, 255, 0.7);
+            --hero-glow: 0 0 15px rgba(0, 229, 255, 0.8);
+            --inverted-bg: rgba(0, 114, 128, 0.2);
+            --path-color: #aaffff;
+            --title-color: #ff00ff;
+        }
+
+        [data-theme="red"] {
+            --text-color: #ff003c;
+            --dim-color: #80001e;
+            --glow: 0 0 5px rgba(255, 0, 60, 0.7);
+            --hero-glow: 0 0 15px rgba(255, 0, 60, 0.8);
+            --inverted-bg: rgba(128, 0, 30, 0.2);
+            --path-color: #ff88aa;
+            --title-color: #ffffff;
+        }
+
+        [data-theme="dos"] {
+            --text-color: #cccccc;
+            --dim-color: #555555;
+            --glow: none;
+            --hero-glow: none;
+            --inverted-bg: #333333;
+            --path-color: #ffffff;
+            --title-color: #ffffff;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f0f0f0;
+            --text-color: #222222;
+            --dim-color: #888888;
+            --glow: none;
+            --hero-glow: none;
+            --inverted-bg: #dddddd;
+            --path-color: #0055aa;
+            --title-color: #aa0000;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'VT323', monospace;
+            font-size: 24px;
+            line-height: 1.4;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+            text-shadow: var(--glow);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* CRT Scanline Effect */
+        body::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.09), rgba(0, 255, 0, 0.03), rgba(0, 0, 255, 0.09));
+            z-index: 999;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+            position: fixed;
+        }
+
+        [data-theme="light"] body::after {
+            opacity: 0.15;
+        }
+
+        .glitch {
+            animation: glitch-anim 0.2s linear infinite;
+        }
+
+        @keyframes glitch-anim {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 1px) }
+            40% { transform: translate(-1px, -1px) }
+            60% { transform: translate(2px, 1px) }
+            80% { transform: translate(1px, -1px) }
+            100% { transform: translate(0) }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            padding-bottom: 100px; /* space for scrolling */
+        }
+
+        /* Header and Buttons */
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--dim-color);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 10;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .header-title {
+            color: var(--title-color);
+            font-weight: bold;
+            text-shadow: var(--glow);
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .header-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .retro-btn {
+            color: var(--text-color);
+            text-decoration: none;
+            background: var(--inverted-bg);
+            border: 2px solid var(--dim-color);
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            display: inline-block;
+            font-family: 'VT323', monospace;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            text-shadow: var(--glow);
+        }
+
+        .retro-btn:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+            text-shadow: none;
+            box-shadow: 0 0 15px var(--text-color);
+            border-color: var(--text-color);
+        }
+
+        .line {
+            margin-bottom: 8px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .prompt {
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        .user-path {
+            color: var(--path-color);
+        }
+
+        .command {
+            color: var(--text-color);
+            font-weight: normal;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 14px;
+            height: 24px;
+            background-color: var(--text-color);
+            vertical-align: bottom;
+            animation: blink 1s step-end infinite;
+            box-shadow: 0 0 8px var(--text-color);
+        }
+
+        [data-theme="light"] .cursor, [data-theme="dos"] .cursor {
+            box-shadow: none;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .section-title {
+            color: var(--title-color);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-bottom: 1px dashed var(--dim-color);
+            display: inline-block;
+            padding-bottom: 4px;
+        }
+
+        /* Fullwidth Carousel */
+        .carousel-wrapper {
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 25px 0;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px dashed var(--dim-color);
+            border-bottom: 1px dashed var(--dim-color);
+            z-index: 5;
+        }
+
+        [data-theme="light"] .carousel-wrapper { background: rgba(255,255,255,0.4); }
+
+        .carousel-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 20px max(20px, calc((100vw - 900px) / 2));
+            scroll-behavior: smooth;
+        }
+
+        .carousel-container::-webkit-scrollbar { height: 8px; }
+        .carousel-container::-webkit-scrollbar-track { background: var(--bg-color); }
+        .carousel-container::-webkit-scrollbar-thumb { background: var(--dim-color); }
+        .carousel-container::-webkit-scrollbar-thumb:hover { background: var(--text-color); }
+
+        .carousel-card {
+            min-width: 280px;
+            border: 1px solid var(--dim-color);
+            background: var(--inverted-bg);
+            padding: 15px;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .carousel-card:hover {
+            border-color: var(--text-color);
+            box-shadow: 0 0 15px rgba(51, 255, 0, 0.2);
+        }
+
+        .carousel-card h3 {
+            margin: 0 0 10px 0;
+            color: var(--title-color);
+            font-size: 1.1em;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--dim-color);
+            padding-bottom: 5px;
+        }
+
+        .carousel-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.9em;
+        }
+
+        .carousel-card li { margin-bottom: 6px; }
+        .carousel-card li::before { content: "> "; color: var(--text-color); }
+
+        /* Interactive Input */
+        #interactive-prompt {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #cli-input {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: inherit;
+            outline: none;
+            flex-grow: 1;
+            margin-left: 8px;
+            text-shadow: var(--glow);
+            caret-color: var(--text-color);
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="terminal-header">
+            <div class="header-title">LAZARENKO_OS // TERMINAL</div>
+            <div class="header-links">
+                <button id="theme-btn" class="retro-btn">[ THEME: GREEN ]</button>
+                <button id="sound-btn" class="retro-btn">[ SOUND: OFF ]</button>
+                <a href="https://t.me/Lleshaav" target="_blank" class="retro-btn">[ TELEGRAM ]</a>
+                <a href="https://github.com/zefri1" target="_blank" class="retro-btn">[ GITHUB ]</a>
+                <a href="Резюме.pdf" download class="retro-btn">[ SAVE PDF ]</a>
+            </div>
+        </header>
+
+        <div id="terminal">
+            <!-- Lines injected by JS -->
+        </div>
+
+        <div id="interactive-prompt" class="hidden">
+            <span class="user-path">root@alexey:~# </span>
+            <input type="text" id="cli-input" autocomplete="off" spellcheck="false">
+        </div>
+    </div>
+
+    <script>
+        // --- THEME SWITCHER ---
+        const themes = ['green', 'amber', 'blue', 'red', 'dos', 'light'];
+        let currentThemeIndex = 0;
+        const themeBtn = document.getElementById('theme-btn');
+        
+        themeBtn.addEventListener('click', () => {
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            const newTheme = themes[currentThemeIndex];
+            document.documentElement.setAttribute('data-theme', newTheme);
+            themeBtn.textContent = `[ THEME: ${newTheme.toUpperCase()} ]`;
+            playClick();
+        });
+
+        // --- SOUND EFFECTS ---
+        let soundEnabled = false;
+        const soundBtn = document.getElementById('sound-btn');
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        soundBtn.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            soundBtn.textContent = soundEnabled ? '[ SOUND: ON ]' : '[ SOUND: OFF ]';
+            if (soundEnabled && !audioCtx) {
+                audioCtx = new AudioContext();
+            }
+            if (soundEnabled) playClick();
+        });
+
+        function playClick() {
+            if (!soundEnabled || !audioCtx) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(150 + Math.random() * 50, audioCtx.currentTime);
+            
+            gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        // --- RESUME DATA ---
+        const resumeData = [
+            { type: 'sys', text: 'INIT SYSTEM... OK' },
+            { type: 'progress', label: 'LOADING KERNEL MODULES', length: 20 },
+            { type: 'progress', label: 'MOUNTING FILESYSTEMS', length: 15 },
+            { type: 'sys', text: 'ESTABLISHING SECURE CONNECTION... DONE' },
+            { type: 'sys', text: '' },
+            { type: 'sys', text: 'INITIALIZING SKILLS MODULE...' },
+            { type: 'fullwidth-carousel' },
+            { type: 'sys', text: '' },
+            { type: 'prompt', path: 'root@alexey:~#', cmd: './view_portfolio.sh' },
+            { type: 'output', text: '==================================================' },
+            { type: 'title', text: 'ЛАЗАРЕНКО АЛЕКСЕЙ ВЛАДИСЛАВОВИЧ' },
+            { type: 'hero-title', text: 'DEVOPS' },
+            { type: 'output', text: 'Системный администратор' },
+            { type: 'output', text: 'Кострома | Возраст: 20 | Telegram: @Lleshaav' },
+            { type: 'output', text: 'Email: al3x1234512345@yandex.ru' },
+            { type: 'output', text: '==================================================' },
+            { type: 'sys', text: '' },
+            { type: 'prompt', path: 'root@alexey:~#', cmd: 'cat /etc/profile_info' },
+            { type: 'title', text: 'ПРОФИЛЬ' },
+            { type: 'output', text: 'Начинающий специалист в области сетевого и системного администрирования.' },
+            { type: 'output', text: 'Опыт: настройка рабочих станций, Windows/Linux, ЛВС, IP-камеры,' },
+            { type: 'output', text: 'антивирусная защита, техподдержка пользователей.' },
+            { type: 'sys', text: '' },
+            { type: 'prompt', path: 'root@alexey:~#', cmd: 'cat /var/log/experience.log' },
+            { type: 'title', text: 'ОПЫТ РАБОТЫ' },
+            { type: 'output', text: '[2025-05-06 - 2026-05-15] Агентство недвижимости, Кострома' },
+            { type: 'output', text: 'Роль: Технический специалист / помощник сисадмина' },
+            { type: 'output', text: ' > Подготовка рабочих мест, обслуживание ПК' },
+            { type: 'output', text: ' > Установка ОС (Windows/Linux), драйверов и ПО' },
+            { type: 'output', text: ' > Настройка ЛВС, роутеров, точек доступа, принтеров' },
+            { type: 'output', text: ' > Монтаж и настройка IP-видеонаблюдения' },
+            { type: 'output', text: ' > Техподдержка сотрудников (HelpDesk)' },
+            { type: 'sys', text: '' },
+            { type: 'prompt', path: 'root@alexey:~#', cmd: 'tail -n 5 /home/education' },
+            { type: 'title', text: 'ОБРАЗОВАНИЕ & ПРОЕКТЫ' },
+            { type: 'output', text: 'Костромской машиностроительный техникум (2022-2026)' },
+            { type: 'output', text: 'Специальность: Сетевое и системное администрирование' },
+            { type: 'sys', text: '' },
+            { type: 'output', text: '[ПРОЕКТ]: Внедрение архитектуры Zero Trust в корпоративной сети.' },
+            { type: 'output', text: 'Сегментация сети, минимальные права доступа, мониторинг сервисов.' },
+            { type: 'sys', text: '' }
+        ];
+
+        const terminal = document.getElementById('terminal');
+        const promptContainer = document.getElementById('interactive-prompt');
+        const cliInput = document.getElementById('cli-input');
+        
+        let currentLine = 0;
+        let autoScrollEnabled = true;
+        let lastScrollY = window.scrollY;
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY < lastScrollY) autoScrollEnabled = false;
+            if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight - 20) autoScrollEnabled = true;
+            lastScrollY = window.scrollY;
+        });
+
+        function scrollToBottom() {
+            if (autoScrollEnabled) window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        // --- GLITCH INITIALIZATION ---
+        document.body.classList.add('glitch');
+        setTimeout(() => document.body.classList.remove('glitch'), 600);
+
+        function renderLine() {
+            if (currentLine >= resumeData.length) {
+                // Done rendering data, show interactive prompt
+                promptContainer.classList.remove('hidden');
+                cliInput.focus({ preventScroll: true });
+                if (autoScrollEnabled) {
+                    scrollToBottom();
+                }
+                return;
+            }
+
+            const lineData = resumeData[currentLine];
+            const div = document.createElement('div');
+            div.className = 'line';
+
+            if (lineData.type === 'prompt') {
+                const pathSpan = document.createElement('span');
+                pathSpan.className = 'user-path';
+                pathSpan.textContent = lineData.path + ' ';
+                div.appendChild(pathSpan);
+
+                const cmdSpan = document.createElement('span');
+                cmdSpan.className = 'command';
+                div.appendChild(cmdSpan);
+
+                const cursor = document.createElement('span');
+                cursor.className = 'cursor';
+                div.appendChild(cursor);
+
+                terminal.appendChild(div);
+                
+                if (lineData.cmd && lineData.cmd.length > 0) {
+                    typeCommand(cmdSpan, cursor, lineData.cmd, 0);
+                } else {
+                    scrollToBottom();
+                }
+            } else if (lineData.type === 'progress') {
+                const div = document.createElement('div');
+                div.className = 'line';
+                terminal.appendChild(div);
+                
+                let p = 0;
+                const total = lineData.length || 20;
+                
+                function updateProgress() {
+                    const filled = Math.floor((p / 100) * total);
+                    const empty = total - filled;
+                    div.textContent = `${lineData.label}... [${'█'.repeat(filled)}${'░'.repeat(empty)}] ${p}%`;
+                    playClick();
+                    
+                    if (p < 100) {
+                        p += Math.floor(Math.random() * 15) + 5;
+                        if (p > 100) p = 100;
+                        setTimeout(updateProgress, Math.random() * 80 + 30);
+                    } else {
+                        currentLine++;
+                        scrollToBottom();
+                        setTimeout(renderLine, Math.random() * 100 + 100);
+                    }
+                }
+                updateProgress();
+            } else if (lineData.type === 'fullwidth-carousel') {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'carousel-wrapper';
+                
+                const container = document.createElement('div');
+                container.className = 'carousel-container';
+
+                const cardsData = [
+                    { title: "OS & VIRTUALIZATION", items: ["Linux (Ubuntu, CentOS)", "Windows 10/11", "Windows Server", "VMware & Hyper-V"] },
+                    { title: "NETWORKING", items: ["TCP/IP, IPv4", "LAN, Wi-Fi, VLAN", "VPN, NAT, Routing", "Cisco & MikroTik"] },
+                    { title: "DEVOPS & ADMIN", items: ["Bash & PowerShell", "Active Directory, GPO", "Docker (Basic)", "CI/CD Concepts"] },
+                    { title: "SEC & MONITORING", items: ["Zabbix & Prometheus", "Grafana Dashboards", "Zero Trust Networks", "Antivirus & Firewalls"] },
+                    { title: "HARDWARE", items: ["PC Assembling & Repair", "Printers & MFPs", "IP Cameras & CCTV", "Network Switches"] }
+                ];
+
+                cardsData.forEach(card => {
+                    const cardDiv = document.createElement('div');
+                    cardDiv.className = 'carousel-card';
+                    const title = document.createElement('h3');
+                    title.textContent = card.title;
+                    cardDiv.appendChild(title);
+                    const ul = document.createElement('ul');
+                    card.items.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        ul.appendChild(li);
+                    });
+                    cardDiv.appendChild(ul);
+                    container.appendChild(cardDiv);
+                });
+
+                wrapper.appendChild(container);
+                terminal.appendChild(wrapper);
+                playClick();
+                currentLine++;
+                scrollToBottom();
+                setTimeout(renderLine, 150); 
+            } else if (lineData.type === 'hero-title') {
+                const el = document.createElement('h1');
+                el.style.color = 'var(--text-color)';
+                el.style.fontSize = '2.5em';
+                el.style.margin = '15px 0 5px 0';
+                el.style.textShadow = 'var(--hero-glow)';
+                el.style.letterSpacing = '5px';
+                el.textContent = lineData.text;
+                terminal.appendChild(el);
+                
+                playClick();
+                currentLine++;
+                scrollToBottom();
+                setTimeout(renderLine, Math.random() * 60 + 20); 
+            } else {
+                if (lineData.type === 'title') {
+                    div.classList.add('section-title');
+                }
+                div.textContent = lineData.text;
+                terminal.appendChild(div);
+                
+                playClick();
+                currentLine++;
+                scrollToBottom();
+                setTimeout(renderLine, Math.random() * 60 + 20); 
+            }
+        }
+
+        function typeCommand(cmdElement, cursorElement, cmdText, index) {
+            if (index < cmdText.length) {
+                cmdElement.textContent += cmdText.charAt(index);
+                playClick();
+                scrollToBottom();
+                setTimeout(() => typeCommand(cmdElement, cursorElement, cmdText, index + 1), 40 + Math.random() * 80);
+            } else {
+                setTimeout(() => {
+                    cursorElement.remove(); 
+                    currentLine++;
+                    renderLine();
+                }, 300);
+            }
+        }
+
+        setTimeout(renderLine, 800);
+
+        // --- INTERACTIVE CLI ---
+        cliInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const cmd = this.value.trim().toLowerCase();
+                this.value = '';
+                
+                if (cmd === '') return;
+                playClick();
+
+                // Echo command
+                const echo = document.createElement('div');
+                echo.className = 'line';
+                echo.innerHTML = `<span class="user-path">root@alexey:~#</span> <span class="command">${cmd}</span>`;
+                terminal.appendChild(echo);
+                
+                // Process command
+                const output = document.createElement('div');
+                output.className = 'line';
+                
+                if (cmd === 'help') {
+                    output.innerHTML = `Available commands:<br>
+  <span style="color:var(--title-color)">help</span>     - Show this message<br>
+  <span style="color:var(--title-color)">clear</span>    - Clear terminal output<br>
+  <span style="color:var(--title-color)">download</span> - Download PDF resume<br>
+  <span style="color:var(--title-color)">contact</span>  - Show contact information<br>
+  <span style="color:var(--title-color)">whoami</span>   - Display user info<br>
+  <span style="color:var(--title-color)">mine</span>     - Start crypto mining simulator<br>
+  <span style="color:var(--title-color)">theme</span>    - Switch color theme`;
+                } else if (cmd === 'clear') {
+                    terminal.innerHTML = '';
+                    scrollToBottom();
+                    return;
+                } else if (cmd === 'contact') {
+                    output.innerHTML = `
+<pre style="line-height:1.2; margin:15px 0; font-family:monospace; color:var(--title-color);">
+   ___________________________
+  / \\                         \\
+ |   |  TO: Alexey Lazarenko   |
+  \\_ |  @Lleshaav              |
+     |  al3x12345...           |
+     \\_________________________/
+</pre>
+Telegram: <a href="https://t.me/Lleshaav" target="_blank" style="color:var(--text-color); text-decoration:underline;">@Lleshaav</a><br>
+Email: <a href="mailto:al3x1234512345@yandex.ru" style="color:var(--text-color); text-decoration:underline;">al3x1234512345@yandex.ru</a>`;
+                } else if (cmd === 'download') {
+                    output.textContent = 'Initiating secure download... OK';
+                    const a = document.createElement('a');
+                    a.href = 'Резюме.pdf';
+                    a.download = 'Резюме.pdf';
+                    a.click();
+                } else if (cmd === 'whoami') {
+                    output.textContent = 'lazarenko_alexey - DevOps / System Administrator. Seeking new challenges.';
+                } else if (cmd === 'mine') {
+                    output.innerHTML = 'Connecting to memhash pool...<br>Hash rate: 45 MH/s<br>[+] Block found! Reward: 0.000001 BTC<br>[+] Block found! Reward: 0.000002 BTC';
+                } else if (cmd === 'theme') {
+                    themeBtn.click();
+                    output.textContent = `Theme changed to: ${themes[currentThemeIndex]}`;
+                } else if (cmd === 'matrix') {
+                    output.textContent = 'Wake up, Alexey... The Matrix has you.';
+                    startMatrixEffect();
+                } else if (cmd === 'sudo rm -rf /') {
+                    output.style.color = '#ff003c';
+                    output.innerHTML = 'CRITICAL ERROR: KERNEL PANIC<br>DELETING FILESYSTEM...';
+                    document.documentElement.setAttribute('data-theme', 'red');
+                    setTimeout(() => {
+                        document.body.innerHTML = '<h1 style="color:#ff003c; text-align:center; margin-top:40vh; font-family:monospace; font-size:3em; text-shadow:0 0 20px #ff003c;">SYSTEM DESTROYED</h1>';
+                        setTimeout(() => location.reload(), 3000);
+                    }, 1500);
+                } else if (cmd === 'sudo') {
+                    output.textContent = 'nice try...';
+                } else {
+                    output.textContent = `bash: ${cmd}: command not found`;
+                }
+                
+                terminal.appendChild(output);
+                if (autoScrollEnabled) {
+                    scrollToBottom();
+                }
+            }
+        });
+
+        // Ensure focus stays on input when clicking terminal background
+        document.body.addEventListener('click', (e) => {
+            if(e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A' && e.target.tagName !== 'INPUT') {
+                cliInput.focus({ preventScroll: true });
+            }
+        });
+
+        // --- MATRIX EFFECT ---
+        function startMatrixEffect() {
+            const c = document.createElement('canvas');
+            c.style.position = 'fixed';
+            c.style.top = '0';
+            c.style.left = '0';
+            c.style.width = '100vw';
+            c.style.height = '100vh';
+            c.style.zIndex = '9998';
+            c.style.pointerEvents = 'none';
+            document.body.appendChild(c);
+            
+            const ctx = c.getContext('2d');
+            c.width = window.innerWidth;
+            c.height = window.innerHeight;
+            
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*'.split('');
+            const fontSize = 16;
+            const columns = c.width / fontSize;
+            const drops = [];
+            for(let x = 0; x < columns; x++) drops[x] = 1;
+            
+            const interval = setInterval(() => {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, c.width, c.height);
+                ctx.fillStyle = '#0F0';
+                ctx.font = fontSize + 'px monospace';
+                
+                for(let i = 0; i < drops.length; i++) {
+                    const text = letters[Math.floor(Math.random() * letters.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    if(drops[i] * fontSize > c.height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                }
+            }, 33);
+            
+            setTimeout(() => {
+                clearInterval(interval);
+                c.style.transition = 'opacity 2s';
+                c.style.opacity = '0';
+                setTimeout(() => c.remove(), 2000);
+            }, 8000); // Effect runs for 8 seconds
+        }
+
+    </script>
+</body>
+</html>
